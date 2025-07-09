@@ -10,7 +10,7 @@
     public class QueryBuilder  extends DBConnection{
 
         //insertOne
-        public  void insertOne(String tableName , Stack<String> fields  ,Stack<String> values)throws SQLException {
+        public  void insertOne(String tableName , List<String> fields  ,List<String> values)throws SQLException {
             if (tableName == null || fields == null || values == null || fields.isEmpty() || values.isEmpty()) {            System.err.println("the table name , fields and values are required to insert");
             } else if (fields.size() != values.size()) {
                 System.err.println("the fields and values dont match");
@@ -35,21 +35,37 @@
                 }
             }
         }
+        //insert Many
+        public void insertMany(String tableName , List<String> fields , List<List<String>> values ) throws SQLException {
+                for (List<String> value : values){
+                    insertOne(tableName , fields , value);
+                }
+        }
         //read all
-        public void readAll(String tableName) throws SQLException{
-            if (tableExists(tableName)){
-            String sql = "select * from "+tableName;
+        public List<List<String>> readAll(String tableName) throws SQLException {
+            List<List<String>> output = new ArrayList<>();
+
+            if (!tableExists(tableName)) {
+                System.err.println("Table does not exist: " + tableName);
+                return output; // return empty list instead of null
+            }
+
+            String sql = "SELECT * FROM " + tableName;
+
             try (PreparedStatement stmt = connect().prepareStatement(sql)) {
-                ResultSet rs = stmt.executeQuery(sql);
+                ResultSet rs = stmt.executeQuery();
+                List<String> cols = getColumnNames(tableName);
+
                 while (rs.next()) {
-                    System.out.println("ID: " + rs.getInt("id") +
-                            ", Name: " + rs.getString("name") +
-                            ", Email: " + rs.getString("email"));
+                    List<String> row = new ArrayList<>();
+                    for (String col : cols) {
+                        row.add(rs.getString(col));
+                    }
+                    output.add(row);
                 }
             }
-        }else {
-                System.err.println("the table doesnt exist");
-            }
-            }
+
+            return output;
+        }
 
     }

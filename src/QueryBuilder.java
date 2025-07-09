@@ -67,5 +67,29 @@
 
             return output;
         }
+        //read one  it will return the first
+        public List<String> readOne(String tableName) throws SQLException {
+            if (!tableExists(tableName)) {
+                System.err.println("Table does not exist: " + tableName);
+                return new ArrayList<>();
+            }
+
+            List<String> cols = getColumnNames(tableName);
+            List<String> output = new ArrayList<>();
+
+            String sql = "SELECT * FROM " + tableName + " LIMIT 1";
+
+            try (PreparedStatement stmt = connect().prepareStatement(sql);
+                 ResultSet rs = stmt.executeQuery()) {
+
+                if (rs.next()) {
+                    for (String col : cols) {
+                        output.add(rs.getString(col));
+                    }
+                }
+            }
+
+            return output;
+        }
 
     }

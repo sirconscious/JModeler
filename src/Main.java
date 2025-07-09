@@ -36,6 +36,7 @@ public class Main {
         try {
             System.out.println(db.getColumnNames("users"));
             System.out.println(new  QueryBuilder().readAll("users"));
+            System.out.println(new QueryBuilder().readOne("users"));
         }catch (SQLException e){
 
         }

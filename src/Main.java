@@ -12,7 +12,7 @@ public class Main {
         cols.push("name");
         cols.push("email");
         Stack<String> vals = new Stack<>();
-        vals.push("3") ;
+        vals.push("6") ;
         vals.push("mehdi");
         vals.push("mehdi@mehdi.com");
         try {
@@ -20,5 +20,12 @@ public class Main {
         }catch (SQLException e){
             System.out.println(e.getMessage());
         }
+        try {
+            System.out.println(db.getColumnNames("users"));
+
+        }catch (SQLException e){
+
+        }
     }
+
 }

@@ -1,8 +1,8 @@
 import io.github.cdimascio.dotenv.Dotenv;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public  class DBConnection {
       Dotenv dotenv = Dotenv.load();
@@ -17,6 +17,7 @@ public  class DBConnection {
       DBConnection(){
           this.connectionUrl = String.format("jdbc:%s://%s:%s/%s", dbConnection, dbHOST, dbPort, dbName);
       }
+        //to connect to the db
       public  Connection connect(){
           try {
               if (this.connection ==null){
@@ -31,4 +32,33 @@ public  class DBConnection {
               return null;
           }
       }
+      //to check if a table exists in db
+      public boolean tableExists(String tableName) throws SQLException {
+          Connection conn = connect();
+          DatabaseMetaData meta = conn.getMetaData();
+
+          try (ResultSet tables = meta.getTables(null, null, tableName, new String[] { "TABLE" })) {
+              return tables.next();  // returns true if table exists
+          }
+      }
+    public List<String> getColumnNames(String tableName) throws SQLException {
+        List<String> columnNames = new ArrayList<>();
+        DatabaseMetaData meta = connect().getMetaData();
+
+        try (ResultSet rs = meta.getColumns(null, null, tableName, null)) {
+            while (rs.next()) {
+                String actualTable = rs.getString("TABLE_NAME");
+                String catalog = rs.getString("TABLE_CAT");
+                String columnName = rs.getString("COLUMN_NAME");
+
+                if (actualTable != null && catalog != null) {
+                    if (actualTable.equalsIgnoreCase(tableName) && catalog.equalsIgnoreCase(dbName)) {
+                        columnNames.add(columnName);
+                    }
+                }
+            }
+        }
+        return columnNames;
+    }
+
 }

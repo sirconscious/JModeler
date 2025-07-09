@@ -15,14 +15,14 @@ public class Main {
         vals.push("6") ;
         vals.push("mehdi");
         vals.push("mehdi@mehdi.com");
-        try {
-        new QueryBuilder().insertOne("users",cols,vals);
-        }catch (SQLException e){
-            System.out.println(e.getMessage());
-        }
+//        try {
+////        new QueryBuilder().insertOne("users",cols,vals);
+//        }catch (SQLException e){
+//            System.out.println(e.getMessage());
+//        }
         try {
             System.out.println(db.getColumnNames("users"));
-
+            new  QueryBuilder().readAll("users");
         }catch (SQLException e){
 
         }

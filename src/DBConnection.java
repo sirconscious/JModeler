@@ -42,6 +42,8 @@ public  class DBConnection {
           }
       }
     public List<String> getColumnNames(String tableName) throws SQLException {
+          if (tableExists(tableName)){
+
         List<String> columnNames = new ArrayList<>();
         DatabaseMetaData meta = connect().getMetaData();
 
@@ -59,6 +61,10 @@ public  class DBConnection {
             }
         }
         return columnNames;
+          } else{
+              System.err.println("the table doesnt exist");
+                return null;
+          }
     }
 
 }

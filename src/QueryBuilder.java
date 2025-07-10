@@ -9,6 +9,12 @@
 
     public class QueryBuilder  extends DBConnection{
 
+        private final ArrayList<String> operators = new ArrayList<>(){{
+            add("=");
+            add(">");
+            add("<");
+            add("!=");
+        }};
         //insertOne
         public  void insertOne(String tableName , List<String> fields  ,List<String> values)throws SQLException {
             if (tableName == null || fields == null || values == null || fields.isEmpty() || values.isEmpty()) {            System.err.println("the table name , fields and values are required to insert");
@@ -90,6 +96,86 @@
             }
 
             return output;
+        }
+        //Delete
+        public void delete(String tableName , String col , String operator , String value)throws SQLException{
+            if (tableExists(tableName)){
+                List<String> cols = getColumnNames(tableName);
+                if (cols.contains(col) ){
+                    if (operators.contains(operator)){
+                        String sql = "DELETE FROM "+tableName+" where " + col + operator + value;
+                        try (PreparedStatement stmt = connect().prepareStatement(sql)) {
+                            stmt.executeUpdate();
+                        }
+                    }else {
+                        System.err.println("the operator provided is invalid");
+                    }
+                }else {
+                    System.err.println("the column is invalid");
+                }
+            }
+        }
+        //update
+        public void update(String tableName, String whereCol, String operator, String whereValue, List<String> updateFields, List<String> updateValues) throws SQLException {
+            // Validation
+            if (tableName == null || updateFields == null || updateValues == null || updateFields.isEmpty() || updateValues.isEmpty()) {
+                System.err.println("Table name, update fields, and values are required.");
+                return;
+            }
+
+            if (updateFields.size() != updateValues.size()) {
+                System.err.println("Fields and values count do not match.");
+                return;
+            }
+
+            if (!tableExists(tableName)) {
+                System.err.println("Table does not exist: " + tableName);
+                return;
+            }
+
+            List<String> tableCols = getColumnNames(tableName);
+
+            for (String field : updateFields) {
+                if (!tableCols.contains(field)) {
+                    System.err.println("Invalid column in update fields: " + field);
+                    return;
+                }
+            }
+
+            if (!tableCols.contains(whereCol)) {
+                System.err.println("Invalid WHERE column: " + whereCol);
+                return;
+            }
+
+            if (!operators.contains(operator)) {
+                System.err.println("Invalid operator: " + operator);
+                return;
+            }
+
+            // Build SET clause: field1 = ?, field2 = ?, ...
+            StringBuilder setClause = new StringBuilder();
+            for (int i = 0; i < updateFields.size(); i++) {
+                setClause.append(updateFields.get(i)).append(" = ?");
+                if (i < updateFields.size() - 1) {
+                    setClause.append(", ");
+                }
+            }
+
+            // Build SQL statement
+            String sql = "UPDATE " + tableName + " SET " + setClause + " WHERE " + whereCol + " " + operator + " ?";
+
+            try (PreparedStatement stmt = connect().prepareStatement(sql)) {
+                // Set update values
+                int paramIndex = 1;
+                for (String value : updateValues) {
+                    stmt.setString(paramIndex++, value);
+                }
+                // Set WHERE value
+                stmt.setString(paramIndex, whereValue);
+
+                int affectedRows = stmt.executeUpdate();
+                System.out.println("Updated rows: " + affectedRows);
+            }
         }
 
     }

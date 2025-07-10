@@ -29,7 +29,13 @@ public class Main {
         vals.add( value2);
         try {
 //        new QueryBuilder().insertOne("users",fields,values);
-            new QueryBuilder().insertMany("users" , fields,vals);
+//            new QueryBuilder().insertMany("users" , fields,vals);
+//            new QueryBuilder().delete("users", "id", "=", "1");
+            List<String> fieldsToUpdate = List.of("name", "email");
+            List<String> newValues = List.of("mehdi_bk", "mehdi@example.com");
+
+            new QueryBuilder().update("users", "id", "=", "2", fieldsToUpdate, newValues);
+
         }catch (SQLException e){
             System.out.println(e.getMessage());
         }

@@ -34,7 +34,7 @@ A lightweight, reusable Java framework to simplify database CRUD operations usin
 1. **Clone the repo**
 
    ```bash
-   git clone https://github.com/yourusername/java-crud-framework.git
+   git clone https://github.com/sirconscious/JModeler
    cd java-crud-framework
 
     Create a .env file in the project root:

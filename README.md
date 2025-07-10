@@ -4,80 +4,118 @@ A lightweight, reusable Java framework to simplify database CRUD operations usin
 
 > ⚠️ **Note:** This project is currently **under development**. Features and APIs may change, and not all functionalities are fully implemented yet.
 
-## Features
+---
 
-- Connect to MySQL (or other JDBC databases) using environment variables
-- Insert, read (select), and check tables dynamically
-- Use Java collections (`Stack<String>`) for flexible field/value input
-- Easy to extend for updates, deletes, and more complex queries
-- Planned REST API integration for web services
+## ✨ Features
 
-## Getting Started
+- ✅ Easy connection to MySQL (or other JDBC-compatible databases) via `.env` configuration
+- ✅ Perform `insert`, `read`, `update`, and `delete` operations using `QueryBuilder`
+- ✅ Chain queries fluently using `FluentQuery` (e.g. `.table("users").insertOne(...).execute()`)
+- ✅ Supports both single and bulk inserts
+- ✅ Dynamically fetch column names and check table existence
+- ✅ Uses Java collections like `List<String>` and `List<List<String>>` for input flexibility
+- 🔄 Ready for extension into model mapping, REST API support, and query filters
 
-### Prerequisites
+---
+
+## ✅ Getting Started
+
+### 🧰 Prerequisites
 
 - Java 11+
 - MySQL database (or other JDBC-compatible DB)
 - [MySQL Connector/J](https://dev.mysql.com/downloads/connector/j/)
-- [dotenv-java](https://github.com/cdimascio/dotenv-java) library
+- [dotenv-java](https://github.com/cdimascio/dotenv-java) for environment config
 
-### Setup
+---
 
-1. Clone the repo:
+### ⚙️ Setup
+
+1. **Clone the repo**
 
    ```bash
    git clone https://github.com/yourusername/java-crud-framework.git
    cd java-crud-framework
 
-    Create a .env file in the project root with your DB credentials:
+    Create a .env file in the project root:
 
-    BD_CONNECTION=mysql
+    DB_CONNECTION=mysql
     DB_NAME=your_db_name
     DB_USER=your_username
     DB_HOST=localhost
     DB_PORT=3306
     DB_PASSWORD=your_password
 
-    Add the required dependencies (mysql-connector-java and dotenv-java) to your classpath or build tool.
+    Add dependencies (manually or with Maven/Gradle):
 
-    Build and run your application.
+        mysql-connector-java
 
-Usage Example
+        dotenv-java
+
+    Compile and run your application with your preferred Java IDE or CLI.
+
+💡 Usage Example
+🧱 Basic DB Connection
 
 DBConnection db = new DBConnection();
 db.connect();
 
-Stack<String> fields = new Stack<>();
-fields.push("name");
-fields.push("email");
-
-Stack<String> values = new Stack<>();
-values.push("Mehdi");
-values.push("mehdi@example.com");
+📦 Using QueryBuilder (classic)
 
 QueryBuilder qb = new QueryBuilder();
+
+List<String> fields = List.of("name", "email");
+List<String> values = List.of("Mehdi", "mehdi@example.com");
+
 qb.insertOne("users", fields, values);
 
-List<String> columns = db.getColumnNames("users");
-System.out.println(columns);
+🚀 Using FluentQuery (recommended)
 
-Future Plans
+FluentQuery fq = new FluentQuery();
 
-    Add full CRUD methods: update, delete
+// Insert one user
+fq.table("users")
+.insertOne(List.of("name", "email"), List.of("Mehdi", "mehdi@example.com"))
+.execute();
 
-    Implement model classes for tables with automatic mapping
+// Read one user
+List<String> user = fq.table("users")
+.readOne()
+.execute()
+.getResult();
 
-    Build REST API endpoints on top of QueryBuilder using frameworks like Javalin or Spring Boot
+System.out.println(user);
 
-    Add input validation and error handling
+// Update a user
+fq.table("users")
+.update("id", "=", "1", List.of("email"), List.of("new@example.com"))
+.execute();
 
-    Support multiple DB types and connection pooling
+// Delete a user
+fq.table("users")
+.delete("id", "=", "2")
+.execute();
 
-Contributing
+🚧 Future Plans
+
+Add full CRUD methods (done ✅)
+
+Implement model classes with automatic table-column mapping
+
+Build REST API endpoints using Javalin or Spring Boot
+
+Add input validation and custom error handling
+
+Support multiple DB types and connection pooling (e.g., HikariCP)
+
+    Implement filters (where, orderBy, limit) in FluentQuery
+
+🤝 Contributing
 
 Contributions are welcome! Feel free to open issues or submit pull requests.
-License
+📝 License
 
-MIT License
+This project is licensed under the MIT License.
+👤 Author
 
-Made with ☕ by Mehdi Elbakouri
+Made with ☕ by Mehdi El bakouri

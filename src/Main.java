@@ -16,9 +16,9 @@ public class Main {
         fields.add("email");
 
         List<String> value1 = new ArrayList<>();
-        value1.add("8");
-        value1.add("Khalid");
-        value1.add("Khalid@Khalid.com");
+        value1.add("10");
+        value1.add("Khalied");
+        value1.add("Kehalid@Khaleid.com");
           List<String> value2 = new ArrayList<>();
         value2.add("9");
         value2.add("Mehdi");
@@ -30,11 +30,24 @@ public class Main {
         try {
 //        new QueryBuilder().insertOne("users",fields,values);
 //            new QueryBuilder().insertMany("users" , fields,vals);
-//            new QueryBuilder().delete("users", "id", "=", "1");
-            List<String> fieldsToUpdate = List.of("name", "email");
-            List<String> newValues = List.of("mehdi_bk", "mehdi@example.com");
+//            new QueryBuilder().delete("users", "id", "=", "10");
+//            List<String> fieldsToUpdate = List.of("name", "email");
+    //            List<String> newValues = List.of("mehdi_bk", "mehdi@example.com");
+    //
+    //            new QueryBuilder().update("users", "id", "=", "2", fieldsToUpdate, newValues);
+//            new FluentQuery().table("users").insertOne(fields,value1);
+            FluentQuery fq = new FluentQuery();
 
-            new QueryBuilder().update("users", "id", "=", "2", fieldsToUpdate, newValues);
+            fq.table("users")
+                    .insertOne(List.of( "name", "email"), List.of("mehdi", "mehdi@example.com"))
+                    .execute();
+
+            List<String> user = fq.table("users")
+                    .readOne()
+                    .execute()
+                    .getResult();
+
+            System.out.println(user);
 
         }catch (SQLException e){
             System.out.println(e.getMessage());

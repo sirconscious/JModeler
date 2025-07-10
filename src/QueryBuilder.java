@@ -98,23 +98,26 @@
             return output;
         }
         //Delete
-        public void delete(String tableName , String col , String operator , String value)throws SQLException{
-            if (tableExists(tableName)){
+        public void delete(String tableName, String col, String operator, String value) throws SQLException {
+            if (tableExists(tableName)) {
                 List<String> cols = getColumnNames(tableName);
-                if (cols.contains(col) ){
-                    if (operators.contains(operator)){
-                        String sql = "DELETE FROM "+tableName+" where " + col + operator + value;
+                if (cols.contains(col)) {
+                    if (operators.contains(operator)) {
+                        String sql = "DELETE FROM " + tableName + " WHERE " + col + " " + operator + " ?";
                         try (PreparedStatement stmt = connect().prepareStatement(sql)) {
-                            stmt.executeUpdate();
+                            stmt.setString(1, value);
+                            int affected = stmt.executeUpdate();
+                            System.out.println("Deleted rows: " + affected);
                         }
-                    }else {
-                        System.err.println("the operator provided is invalid");
+                    } else {
+                        System.err.println("The operator provided is invalid");
                     }
-                }else {
-                    System.err.println("the column is invalid");
+                } else {
+                    System.err.println("The column is invalid");
                 }
             }
         }
+
         //update
         public void update(String tableName, String whereCol, String operator, String whereValue, List<String> updateFields, List<String> updateValues) throws SQLException {
             // Validation

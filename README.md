@@ -9,8 +9,8 @@ A lightweight, reusable Java framework to simplify database CRUD operations usin
 ## ✨ Features
 
 - ✅ Easy connection to MySQL (or other JDBC-compatible databases) via `.env` configuration
-- ✅ Perform `insert`, `read`, `update`, and `delete` operations using `QueryBuilder`
-- ✅ Chain queries fluently using `FluentQuery` (e.g. `.table("users").insertOne(...).execute()`)
+- ✅ Perform `insert`, `read`, `update`, and `delete` operations using `com.mehdi.crud.QueryBuilder`
+- ✅ Chain queries fluently using `com.mehdi.crud.FluentQuery` (e.g. `.table("users").insertOne(...).execute()`)
 - ✅ Supports both single and bulk inserts
 - ✅ Dynamically fetch column names and check table existence
 - ✅ Uses Java collections like `List<String>` and `List<List<String>>` for input flexibility
@@ -57,21 +57,21 @@ A lightweight, reusable Java framework to simplify database CRUD operations usin
 💡 Usage Example
 🧱 Basic DB Connection
 
-DBConnection db = new DBConnection();
+com.mehdi.crud.DBConnection db = new com.mehdi.crud.DBConnection();
 db.connect();
 
-📦 Using QueryBuilder (classic)
+📦 Using com.mehdi.crud.QueryBuilder (classic)
 
-QueryBuilder qb = new QueryBuilder();
+com.mehdi.crud.QueryBuilder qb = new com.mehdi.crud.QueryBuilder();
 
 List<String> fields = List.of("name", "email");
 List<String> values = List.of("Mehdi", "mehdi@example.com");
 
 qb.insertOne("users", fields, values);
 
-🚀 Using FluentQuery (recommended)
+🚀 Using com.mehdi.crud.FluentQuery (recommended)
 
-FluentQuery fq = new FluentQuery();
+com.mehdi.crud.FluentQuery fq = new com.mehdi.crud.FluentQuery();
 
 // Insert one user
 fq.table("users")
@@ -108,7 +108,7 @@ Add input validation and custom error handling
 
 Support multiple DB types and connection pooling (e.g., HikariCP)
 
-    Implement filters (where, orderBy, limit) in FluentQuery
+    Implement filters (where, orderBy, limit) in com.mehdi.crud.FluentQuery
 
 🤝 Contributing
 

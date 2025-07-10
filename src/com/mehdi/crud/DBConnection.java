@@ -1,3 +1,5 @@
+package com.mehdi.crud;
+
 import io.github.cdimascio.dotenv.Dotenv;
 
 import java.sql.*;

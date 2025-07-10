@@ -1,7 +1,8 @@
+package com.mehdi.crud;
+
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Stack;
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
@@ -28,18 +29,18 @@ public class Main {
         vals.add(value1 ) ;
         vals.add( value2);
         try {
-//        new QueryBuilder().insertOne("users",fields,values);
-//            new QueryBuilder().insertMany("users" , fields,vals);
-//            new QueryBuilder().delete("users", "id", "=", "10");
+//        new com.mehdi.crud.QueryBuilder().insertOne("users",fields,values);
+//            new com.mehdi.crud.QueryBuilder().insertMany("users" , fields,vals);
+//            new com.mehdi.crud.QueryBuilder().delete("users", "id", "=", "10");
 //            List<String> fieldsToUpdate = List.of("name", "email");
     //            List<String> newValues = List.of("mehdi_bk", "mehdi@example.com");
     //
-    //            new QueryBuilder().update("users", "id", "=", "2", fieldsToUpdate, newValues);
-//            new FluentQuery().table("users").insertOne(fields,value1);
+    //            new com.mehdi.crud.QueryBuilder().update("users", "id", "=", "2", fieldsToUpdate, newValues);
+//            new com.mehdi.crud.FluentQuery().table("users").insertOne(fields,value1);
             FluentQuery fq = new FluentQuery();
 
             fq.table("users")
-                    .insertOne(List.of( "name", "email"), List.of("mehdi", "mehdi@example.com"))
+                    .insertOne(List.of( "name", "email"), List.of("mehdzi", "mehdzi@example.com"))
                     .execute();
 
             List<String> user = fq.table("users")
@@ -54,7 +55,7 @@ public class Main {
         }
         try {
             System.out.println(db.getColumnNames("users"));
-            System.out.println(new  QueryBuilder().readAll("users"));
+            System.out.println(new QueryBuilder().readAll("users"));
             System.out.println(new QueryBuilder().readOne("users"));
         }catch (SQLException e){
 

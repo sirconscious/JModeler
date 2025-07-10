@@ -1,13 +1,12 @@
-    import java.io.IOException;
-    import java.sql.DatabaseMetaData;
-    import java.sql.PreparedStatement;
+package com.mehdi.crud;
+
+import java.sql.PreparedStatement;
     import java.sql.ResultSet;
     import java.sql.SQLException;
     import java.util.ArrayList;
     import java.util.List;
-    import java.util.Stack;
 
-    public class QueryBuilder  extends DBConnection{
+    public class QueryBuilder  extends DBConnection {
 
         private final ArrayList<String> operators = new ArrayList<>(){{
             add("=");
